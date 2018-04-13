@@ -7,7 +7,6 @@ import (
 
 	"github.com/coinbase/step/machine"
 	"github.com/coinbase/step/utils/run"
-	"github.com/coinbase/step/utils/to"
 )
 
 func main() {
@@ -15,7 +14,7 @@ func main() {
 	switch len(os.Args) {
 	case 1:
 		fmt.Println("Starting Lambda")
-		run.Lambda(StateMachine("lambda"))
+		run.Lambda(StateMachine())
 	case 2:
 		command = os.Args[1]
 		arg = ""
@@ -28,9 +27,9 @@ func main() {
 
 	switch command {
 	case "json":
-		run.JSON(StateMachine(arg))
+		run.JSON(StateMachine())
 	case "exec":
-		run.Exec(StateMachine(""))(&arg)
+		run.Exec(StateMachine())(&arg)
 	default:
 		printUsage() // Print how to use and exit
 	}
@@ -43,7 +42,7 @@ func printUsage() {
 
 // StateMachine returns the StateMachine
 // replacing the `Resource` in Task states with the lambdaArn
-func StateMachine(lambdaArn string) (*machine.StateMachine, error) {
+func StateMachine() (*machine.StateMachine, error) {
 	state_machine, err := machine.FromJSON([]byte(`{
     "Comment": "Hello World",
     "StartAt": "HelloFn",
@@ -66,16 +65,6 @@ func StateMachine(lambdaArn string) (*machine.StateMachine, error) {
 		return nil, err
 	}
 
-	if lambdaArn == "" {
-		lambdaArn = "coinbase-step-hello-world"
-		// Try build a lambda arn
-		region, account_id := to.RegionAccount()
-		if region != nil && account_id != nil {
-			lambdaArn = *to.LambdaArn(region, account_id, &lambdaArn)
-		}
-	}
-
-	state_machine.SetResource(&lambdaArn)
 	state_machine.SetResourceFunction("Hello", HelloHandler)
 
 	return state_machine, nil
@@ -94,7 +83,7 @@ type Hello struct {
 // The input is auto-unmarshalled and marsheled from and to JSON
 func HelloHandler(_ context.Context, hello *Hello) (interface{}, error) {
 	if hello.Greeting == "" {
-		hello.Greeting = "Hello World"
+		hello.Greeting = "Giday Mate"
 	}
 	return hello, nil
 }

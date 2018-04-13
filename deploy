@@ -12,4 +12,7 @@ zip lambda.zip lambda
 step deploy                           \
   -lambda "coinbase-step-hello-world" \
   -step "coinbase-step-hello-world"   \
-  -states "$(./step-hello-world json)"
+  -states "$(./step-hello-world json)"\
+  -project "coinbase/step-hello-world"\
+  -config "development" \
+  -account "$1"
