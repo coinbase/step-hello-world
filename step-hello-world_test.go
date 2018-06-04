@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/coinbase/step/machine"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ func Test_HelloWorld_StateMachine(t *testing.T) {
 	assert.Equal(t, "Giday Mate", output["Greeting"])
 
 	assert.Equal(t, state_machine.ExecutionPath(), []string{
-		"HelloFn",
 		"Hello",
+		machine.TaskFnName("Hello"),
 	})
 }

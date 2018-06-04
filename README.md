@@ -27,19 +27,13 @@ Looking at the State Machine output:
 ./step-hello-world json
 {
  "Comment": "Hello World",
- "StartAt": "HelloFn",
+ "StartAt": "Hello",
  "States": {
   "Hello": {
-   "Type": "Task",
+   "Type": "TaskFn",
    "Comment": "Deploy Step Function",
    "Resource": "coinbase-step-hello-world",
    "End": true
-  },
-  "HelloFn": {
-   "Type": "Pass",
-   "ResultPath": "$.Task",
-   "Result": "Hello",
-   "Next": "Hello"
   }
  }
 }
