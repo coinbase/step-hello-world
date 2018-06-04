@@ -2,3 +2,4 @@ deploy:
   engine: StepDeployer
 secure:
   required_reviews: 1
+  upstream_repository: coinbase/step-hello-world
