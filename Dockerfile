@@ -19,7 +19,9 @@ RUN go build && go install
 # Use to deploy Lambda
 RUN GOOS=linux go build -o lambda
 RUN zip lambda.zip lambda
+RUN shasum -a 256 lambda.zip | awk '{print $1}' > lambda.zip.sha256
 
-RUN step-hello-world json -lambda "%lambda%" > state_machine.json
+RUN mv lambda.zip.sha256 lambda.zip /
+RUN step-hello-world json >  /state_machine.json
 
 CMD ["step-hello-world"]
