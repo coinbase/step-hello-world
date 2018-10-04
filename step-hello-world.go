@@ -45,10 +45,16 @@ func printUsage() {
 func StateMachine() (*machine.StateMachine, error) {
 	state_machine, err := machine.FromJSON([]byte(`{
     "Comment": "Hello World",
-    "StartAt": "Hello",
+    "StartAt": "HelloFn",
     "States": {
+      "HelloFn": {
+        "Type": "Pass",
+        "Result": "Hello",
+        "ResultPath": "$.Task",
+        "Next": "Hello"
+      },
       "Hello": {
-        "Type": "TaskFn",
+        "Type": "Task",
         "Comment": "Deploy Step Function",
         "End": true
       }
