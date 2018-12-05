@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/coinbase/step/handler"
 	"github.com/coinbase/step/machine"
 	"github.com/coinbase/step/utils/run"
 )
@@ -14,7 +15,7 @@ func main() {
 	switch len(os.Args) {
 	case 1:
 		fmt.Println("Starting Lambda")
-		run.Lambda(StateMachine())
+		run.LambdaTasks(CreateTaskHandlers())
 	case 2:
 		command = os.Args[1]
 		arg = ""
@@ -49,6 +50,7 @@ func StateMachine() (*machine.StateMachine, error) {
     "States": {
       "Hello": {
         "Type": "TaskFn",
+        "Resource": "arn:aws:lambda:{{aws_region}}:{{aws_account}}:function:{{lambda_name}}",
         "Comment": "Deploy Step Function",
         "End": true
       }
@@ -59,9 +61,15 @@ func StateMachine() (*machine.StateMachine, error) {
 		return nil, err
 	}
 
-	state_machine.SetResourceFunction("Hello", HelloHandler)
-
 	return state_machine, nil
+}
+
+// CreateTaskHandlers returns
+func CreateTaskHandlers() *handler.TaskHandlers {
+	tm := handler.TaskHandlers{}
+	tm["Hello"] = HelloHandler
+
+	return &tm
 }
 
 ////////////
