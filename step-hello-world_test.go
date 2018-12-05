@@ -3,20 +3,22 @@ package main
 import (
 	"testing"
 
-	"github.com/coinbase/step/machine"
 	"github.com/stretchr/testify/assert"
 )
 
 func Test_HelloWorld_StateMachine(t *testing.T) {
-	state_machine, err := StateMachine()
+	stateMachine, err := StateMachine()
 	assert.NoError(t, err)
 
-	output, err := state_machine.ExecuteToMap(&Hello{})
+	err = stateMachine.SetTaskFnHandlers(CreateTaskHandlers())
 	assert.NoError(t, err)
-	assert.Equal(t, "Giday Mate", output["Greeting"])
 
-	assert.Equal(t, state_machine.ExecutionPath(), []string{
+
+	exec, err := stateMachine.Execute(&Hello{})
+	assert.NoError(t, err)
+	assert.Equal(t, "Giday Mate", exec.Output["Greeting"])
+
+	assert.Equal(t, exec.Path(), []string{
 		"Hello",
-		machine.TaskFnName("Hello"),
 	})
 }
