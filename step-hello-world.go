@@ -49,8 +49,8 @@ func StateMachine() (*machine.StateMachine, error) {
     "StartAt": "Hello",
     "States": {
       "Hello": {
-				"Type": "TaskFn",
-				"Resource": "arn:aws:lambda:{{aws_region}}:{{aws_account}}:function:{{lambda_name}}",
+        "Type": "TaskFn",
+        "Resource": "arn:aws:lambda:{{aws_region}}:{{aws_account}}:function:{{lambda_name}}",
         "Comment": "Deploy Step Function",
         "End": true
       }
